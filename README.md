@@ -65,12 +65,13 @@ In first person the game draws the player model only for the shadow pass. The mo
 copy with only the head at the true position, and a visible copy pushed back by the camera, with the head and hat
 hidden and the arms and held items shown. The flat hands are cancelled through the `render_hand` hook.
 
-Hooks (all `HEAD`, see `horizon-mixin.toml`): `player_model_geometry`, `cosmetics_fx_geometry`,
+Hooks (all `HEAD`, see `horizon-mixin.toml`): `player_model_geometry`, `fangs_geometry` (the visible body, drawn
+right after the players' cosmetics),
 `player_model_shown`, `player_model_visibility`, `cosmetics::covered`, `held_item_geometry`, `head_item_geometry`,
 `render_hand`, and `anim::setup` / `anim::bob` for eating. State lives in `runtime.rs` (`horizon_client::kotost_fp`).
 It has `priority = 90`, below Kotost Bust's 100, so where both hook one function the bust's hook runs first.
 
-Built for Horizon `fdc87ae` (Nightly 2026-11-08); the launcher pins that commit when it builds the mod.
+Builds on Horizon `fdc87ae` (Nightly 2026-11-08) and `9f42064` (Nightly 2026-11-13) from the same source.
 
 ## License
 

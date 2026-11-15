@@ -1,15 +1,15 @@
 # Kotost First Person: your own body, legs and both arms in first person, the items held in the model's
 # 3D hands, eating and drinking with the game's own hands before the face (or the 3D arm).
 # Works alone or with Kotost Bust (kotost_body): whatever draws on the player model shows on the body too.
-# Native mod for Horizon nightly-2026-11-08-fdc87ae (docs/native-mods.md, horizon-mixins).
+# Native mod for Horizon (docs/native-mods.md, horizon-mixins): builds on nightly-2026-11-08-fdc87ae and 2026-11-13-9f42064.
 [mod]
 id = "kotost_firstperson"
-version = "0.1.0"
+version = "0.1.1"
 # Below Kotost Bust (100): where both hook one function, the bust's hook runs first.
 priority = 90
 
 [compatibility]
-horizon_revision = "fdc87aecdbd116bf1e08adcd062fcbaea8c2e2ca"
+horizon_revision = "9f42064c11efe7ef3e5ed2baad7ddc2a3b36eea0"
 
 # State and settings, in horizon-client-lib's root so both crates reach it (horizon_client::kotost_fp).
 [[module]]
@@ -57,16 +57,18 @@ bindings = [
   { name = "out", ty = "&mut Vec<horizon_client::mesher::Vertex>", value = "&mut *out" },
 ]
 
-# The visible body, after the shadow-only span: its own player span, drawn by the camera.
+# The visible body, after the shadow-only span and the players' cosmetics: its own player span, drawn by the
+# camera. At the head of the evoker fangs' geometry, the next thing the frame draws (in game/fangs.rs on every
+# Horizon so far; the cosmetics' own function there moved to game/player_hooks.rs after Nightly 2026-11-08).
 [[injection]]
 id = "fp-body"
 kind = "HEAD"
-target = "horizon_client::game::cosmetics::fx::Game<'_>::cosmetics_fx_geometry"
+target = "horizon_client::game::fangs::Game<'_>::fangs_geometry"
 helper = "fp_body.rs"
 bindings = [
   { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
-  { name = "camera", ty = "DVec3", value = "camera" },
-  { name = "out", ty = "&mut Vec<Vertex>", value = "&mut *out" },
+  { name = "camera", ty = "glam::DVec3", value = "camera" },
+  { name = "out", ty = "&mut Vec<horizon_client::mesher::Vertex>", value = "&mut *out" },
 ]
 
 [[injection]]

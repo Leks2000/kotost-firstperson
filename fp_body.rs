@@ -1,4 +1,8 @@
-fn kotost_fp_body(game: &crate::game::Game<'_>, camera: DVec3, out: &mut Vec<Vertex>) {
+fn kotost_fp_body(
+    game: &crate::game::Game<'_>,
+    camera: glam::DVec3,
+    out: &mut Vec<horizon_client::mesher::Vertex>,
+) {
     use horizon_client::kotost_fp as kb;
     if kb::mode() != kb::Mode::Off
         || !kb::first_person()
@@ -21,10 +25,12 @@ fn kotost_fp_body(game: &crate::game::Game<'_>, camera: DVec3, out: &mut Vec<Ver
         turn += 360.0;
     }
     let yaw = (m.previous_head_yaw + turn * f).to_radians();
-    let ahead = DVec3::new(-f64::from(yaw.sin()), 0.0, f64::from(yaw.cos()));
+    let ahead = glam::DVec3::new(-f64::from(yaw.sin()), 0.0, f64::from(yaw.cos()));
     let back = kb::back(pitch);
     game.mark_player(out.len(), false);
     kb::set_mode(kb::Mode::Body);
     game.player_model_geometry(camera + ahead * back, alpha, out);
     kb::set_mode(kb::Mode::Off);
+    // The fangs' span began where the body now begins: begin it again after the body.
+    game.mark_entity(out.len(), "minecraft:evoker_fangs");
 }
